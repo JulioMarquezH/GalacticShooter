@@ -64,3 +64,4 @@ Al iniciar el juego, se te presentará una opción para elegir entre dos modalid
 - El juego termina cuando ambos jugadores han perdido todas sus vidas.
 
 ¡Buena suerte y diviértete jugando!
+
