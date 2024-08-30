@@ -46,7 +46,7 @@ Sigue estos pasos para clonar el repositorio e instalar las dependencias necesar
 4. **Ejecutar el juego:**
     - Después de instalar las dependencias, puedes ejecutar el juego con el siguiente comando:
         ```bash
-        python index.py
+        python main.py
         ```
 
 ## Modos de Juego
