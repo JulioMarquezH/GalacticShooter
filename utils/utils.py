@@ -1,11 +1,16 @@
 import pygame
 from attacks.kind_attacks.bullets import Bullets
+from items.itmes import Items
+from items.typeItems import TYPE_ITEMS
+import random
+
 
 pygame.init()
 pygame.mixer.init()
 
 #constante
 SOUND_BULLETS = pygame.mixer.Sound('media/audio/soundBullets.mp3')
+ITEMS_SIZE = len(TYPE_ITEMS) - 1
 
 # funciones
 def validate_edges(limit, rect, axis):
@@ -20,15 +25,20 @@ def validate_edges(limit, rect, axis):
 
 
 def create_bullet(character, bullets):
-    
     if pygame.time.get_ticks() - character.last_bullet > character.interval:
         bullets.append(Bullets(character.rect.centerx, character.rect.centery))
         character.last_bullet = pygame.time.get_ticks()
         SOUND_BULLETS.play()
+        
+def create_item(enemy, items):
+    numRandom = random.randint(0, ITEMS_SIZE)
+    items.append(Items(enemy.rect.centerx, enemy.rect.centery, TYPE_ITEMS[numRandom]))
+    
     
 
 #imprimir que sale en la flech
 def manage_keys(keys, character, dimensions, bullets):
+    character.speed = max(character.speed_min, min(character.speed, character.speed_max))
     if keys[character.key[0]]:
         if validate_edges(0, character.rect, 1):
             character.y -= character.speed
@@ -55,3 +65,6 @@ def check_player_status(player_1, player_2):
         return "player_2 dead"
     else:
         return "playing"
+    
+def filter_by_type(item_type, TYPE_ITEMS):
+    return [item for item in TYPE_ITEMS if item['type'] == item_type]

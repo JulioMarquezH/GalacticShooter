@@ -4,7 +4,7 @@ import pygame
 
 HIGH = 20
 WIDTH = 20
-SPEED = 8
+SPEED = 15
 COLOR = '#ffffff'
 DAMAGE = 1
 IMAGE= "media/images/bullets.svg"

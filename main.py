@@ -38,9 +38,10 @@ if game_mode_2:
 playing = True
 enemies = []
 bullets = []
+items = []
 time = 0
 last_time = 0
-time_between_enemies = 500
+time_between_enemies = 250
 
 # Bucle principal del juego
 while playing:
@@ -75,6 +76,33 @@ while playing:
         bullet.move()
         if bullet.y < 0:
             bullets.remove(bullet)
+            
+    for item in items:
+        item.move()
+        
+        # Colisiones con jugadores
+        if player_1.lives > 0 and pygame.Rect.colliderect(item.rect, player_1.rect):
+            attribute_name = item.attributes['attribute']
+            attribute_value = item.attributes['amount']
+            if item.attributes['is_divided']:
+                setattr(player_1, attribute_name, getattr(player_1, attribute_name, 0) / attribute_value)
+            else:
+                setattr(player_1, attribute_name, getattr(player_1, attribute_name, 0) + attribute_value)
+            items.remove(item)
+            continue
+        elif game_mode_2:
+            if player_2.lives > 0 and pygame.Rect.colliderect(item.rect, player_2.rect):
+                attribute_name = item.attributes['attribute']
+                attribute_value = item.attributes['amount']
+                if item.attributes['is_divided']:
+                    setattr(player_2, attribute_name, getattr(player_2, attribute_name, 0) / attribute_value)
+                else:
+                    setattr(player_2, attribute_name, getattr(player_2, attribute_name, 0) + attribute_value)
+                items.remove(item)
+                continue
+        
+        if item.y < 0:
+            items.remove(item)
     
     # Actualización de enemigos
     for enemy in enemies:
@@ -105,6 +133,7 @@ while playing:
         # Enemigos derrotados
         if enemy.lives <= 0:
             enemies.remove(enemy)
+            utils.create_item(enemy, items)
             continue
 
     # 3. Dibujar en pantalla
@@ -120,7 +149,10 @@ while playing:
     # Dibujar balas
     for bullet in bullets:
         bullet.paint(WINDOW)
-
+        
+    for item in items:
+        item.paint(WINDOW)
+        
     # Dibujar enemigos
     for enemy in enemies:
         enemy.paint(WINDOW)
